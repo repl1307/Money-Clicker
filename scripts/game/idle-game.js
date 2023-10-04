@@ -53,7 +53,7 @@ class Game {
   }
   //create an upgrade provided the name, amount of money added per second, and initial price
   // a custom image can also be provided, by giving the path as a string
-  addUpgrade(name="N/A", customDescription="Gives Money", income=1, price=10, customOpts={interval: 1, imageSrc: "/images/money.png"}){
+  addUpgrade(name="N/A", customDescription="Gives Money", income=1, price=10, customOpts={interval: 1, imageSrc: "./images/money.png"}){
     let interval = customOpts.interval || 1;
     let imageSrc = customOpts.imageSrc || "/images/money.png"
     const upgradeDiv = document.createElement('div');
