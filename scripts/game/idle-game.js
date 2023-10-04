@@ -194,8 +194,8 @@ class Game {
     if(localStorageAvailable && localStorage.getItem('upgrades')){
       const upgrades = JSON.parse(localStorage.getItem('upgrades'));
       for(const [key, value] of Object.entries(upgrades)){
-        debug.log(key);
-        debug.log(value);
+        console.log(key);
+        console.log(value);
         const upgrade = this.upgrades[key];
         upgrade.quantityOwned = value.quantityOwned;
         upgrade.imageSrc = value.imageSrc;
@@ -205,7 +205,7 @@ class Game {
         upgrade.owned.textContent = 'Owned: '+upgrade.quantityOwned;
         upgrade.purchaseButton.textContent = 'Purchase ($'+upgrade.price.format()+')';
       }
-      debug.log(this.upgrades)
+      console.log(this.upgrades)
     }
     //update local storage on page close
     window.onbeforeunload = (e) => {
