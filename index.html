@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Money Maker</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="/scripts/tippy/popper.min.js"></script>
+  <script src="/scripts/tippy/tippy.umd.js"></script>
+  <script src="console.js"></script>
+</head>
+
+<body>
+  <script>const debug = new Console('30px', '-90vmin');</script>
+  <div class="main-container">
+    <div class="game-header"><h1>Money Maker</h1></div>
+    <div class="game-container">
+      <!-- where clickable icon and such is -->
+      <div class="clicker-container">
+        <h1></h1>
+        <p></p>
+        <div class="clicker-image-container">
+          <button>
+            <img src="images/money.png" width="200px" />
+          </button>
+        </div>
+        <button id="reset-storage" onclick="(()=>{
+          if(confirm('Are you sure you want to reset your progress? This is irreversible.')){
+            localStorage.clear(); 
+            saveData = false;
+            location.reload();
+          }
+        })();">Reset Local Storage?</button>
+      </div>
+      <!-- scrollable div with purchaseable upgrades -->
+      <div class="upgrades-container"></div>
+    </div>
+  </div>
+
+
+  <script src="/scripts/game/smallScreen.js"></script>
+  <script src="/scripts/game/idle-game.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
