@@ -1,3 +1,6 @@
+import { FallingMoneyManager } from './fallingMoney.js';
+import handleSmallScreen from './smallScreen.js';
+
 let saveData = true;
 class Game {
   constructor(){
@@ -5,24 +8,22 @@ class Game {
     this.time = Date.now();
     this.totalMoney = 0;
     this.name;
+    this.clickCount = 0;
+    this.clickIncome = 1;
+    this.fallingMoneyManager = new FallingMoneyManager();
+    this.handleSmallScreen = handleSmallScreen;
+    window.addEventListener('resize', this.handleSmallScreen);
+    this.handleSmallScreen();
     //add clicker functionality
     document.querySelector('.clicker-image-container button').onclick = () => {
-      this.totalMoney+=1;
+      this.totalMoney+=this.clickIncome;
+      this.clickCount++;
       this.updateMoneyDisplay();
     }
-
     Number.prototype.format = function(decimalPlaces=2){
       return this.valueOf().toLocaleString('en-US', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces})
     }
   }
-  // //get total revenue
-  // getTotalIncomePerSecond(){
-  //   let totalRevenue = 0;
-  //   for(const upgrade of Object.values(this.upgrades)){
-  //     totalRevenue += upgrade.income*upgrade.quantityOwned/upgrade.interval;
-  //   }
-  //   return totalRevenue;
-  // }
   //get revenue per second of upgrade, if no param provided, returns total income per second
   getIncomePerSecond(selectedUpgrade=null){
     let incomePerSecond = 0;
@@ -53,9 +54,9 @@ class Game {
   }
   //create an upgrade provided the name, amount of money added per second, and initial price
   // a custom image can also be provided, by giving the path as a string
-  addUpgrade(name="N/A", customDescription="Gives Money", income=1, price=10, customOpts={interval: 1, imageSrc: "./images/money.png"}){
+  addUpgrade(name="N/A", customDescription="Gives Money", income=1, price=10, customOpts={interval: 1, imageSrc: "/images/money.png"}){
     let interval = customOpts.interval || 1;
-    let imageSrc = customOpts.imageSrc || "./images/money.png"
+    let imageSrc = customOpts.imageSrc || "/images/money.png"
     const upgradeDiv = document.createElement('div');
     upgradeDiv.classList.add('upgrade');
   
@@ -134,7 +135,9 @@ class Game {
       allowHTML: true,
       theme: 'money',
     });
-    
+    for(const upgrade of Object.values(this.upgrades)){
+        // log(this.getIncomePerSecond(upgrade));
+    }
     return this.upgrades[name];
   }
   //game update loop
@@ -159,7 +162,7 @@ class Game {
   
   //get user inputted name and start game loop
   startGame(){
-    const localStorageAvailable = (()=>{
+    this.localStorageAvailable = ()=>{
     const test = 'test';
       try {
           localStorage.setItem(test, test);
@@ -168,8 +171,9 @@ class Game {
       } catch(e) {
           return false;
       }
-    })();
-    console.log(localStorageAvailable? "available": 'not available');
+    };
+    const localStorageAvailable = this.localStorageAvailable();
+    console.log('Local Storage is: '+(localStorageAvailable? 'available': 'not available'));
     //check if name has been stored
     if(localStorageAvailable && localStorage.getItem('name')){
       this.name = localStorage.getItem('name');
@@ -194,8 +198,8 @@ class Game {
     if(localStorageAvailable && localStorage.getItem('upgrades')){
       const upgrades = JSON.parse(localStorage.getItem('upgrades'));
       for(const [key, value] of Object.entries(upgrades)){
-        console.log(key);
-        console.log(value);
+        // debug.log(key);
+        // debug.log(value);
         const upgrade = this.upgrades[key];
         upgrade.quantityOwned = value.quantityOwned;
         upgrade.imageSrc = value.imageSrc;
@@ -204,12 +208,13 @@ class Game {
         upgrade.interval = value.interval;
         upgrade.owned.textContent = 'Owned: '+upgrade.quantityOwned;
         upgrade.purchaseButton.textContent = 'Purchase ($'+upgrade.price.format()+')';
+        upgrade.popup.setContent(this.updatePopUpContent(upgrade));
       }
-      console.log(this.upgrades)
+      // debug.log(this.upgrades)
     }
     //update local storage on page close
     window.onbeforeunload = (e) => {
-      if(localStorageAvailable && saveData){
+      if(this.localStorageAvailable() && saveData){
         localStorage.setItem('totalMoney', this.totalMoney);
         localStorage.setItem('time', this.time);
         for(const upgrade of Object.values(this.upgrades)){
@@ -217,6 +222,7 @@ class Game {
           delete upgrade.popup;
         }
         localStorage.setItem('upgrades', JSON.stringify(this.upgrades));
+        
       }
     }
     this.updateMoneyDisplay();
@@ -224,3 +230,6 @@ class Game {
   }
 
 }
+
+console.log('yes')
+export default Game;
