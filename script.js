@@ -1,3 +1,5 @@
+import Game from './scripts/game/idle-game.js';
+
 const game = new Game();
 //example upgrades
 game.addUpgrade("Change Collecter", "This guy collects coins he finds on the street and gives them to you.", 0.5, 15);
