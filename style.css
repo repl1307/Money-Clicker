@@ -19,7 +19,7 @@ body{
   user-select: none;
 }
 button {
-  background-color: #115408;
+  background-color: rgb(17, 84, 8);
   color: white;
   border-radius: 2px;
   border: 1px solid white;
@@ -27,33 +27,39 @@ button {
 }
 button:active{
   transform: scale(0.9);
+  opacity: 0.9;
+}
+button:focus {
+  box-shadow: none;
+  outline: none;
 }
 .game-header {
   /* height: min-content; */
   padding: 5px;
-  font-size: 1.25rem;
+  margin: 0;
+  font-size: 3rem;
   display: flex;
+  flex: 0; 
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.25);
-  height: 10vh;
+  /* height: 10vh; */
   white-space: nowrap;
-
 }
-.game-header div h1{
+/* .game-header h1{
   border: 1px solid white;
   padding: 3px 200px;
   min-height: calc(100%-6px);
-}
+} */
 .game-container{
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 90vh;
   margin: 0;
   padding: 0;
   width: 100vw;
   overflow: hidden;
+  flex-grow: 2;
 }
 /* styling for clicker portion for game */
 .clicker-container{
@@ -62,38 +68,48 @@ button:active{
   background-color: darkgrey;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+  /* display: flex;
+  flex-direction: column; */
 }
 .clicker-container h1{
-  background-color: rgba(0, 0, 0, 0.25);
+  position: relative;
+  background-color: #7a7a7a;
   margin: 0;
   padding: 5px;
   font-size: 4vmin;
   overflow-wrap: anywhere;
   overflow: hidden;
   min-width: 100%;
+  z-index: 10;
 }
 .clicker-container p {
-  background-color: rgba(0, 0, 0, 0.15);
+  position: relative;
+  background-color: #8a8a8a;
   font-size: 3.5vmin;
   margin: 0;
   padding: 5px;
+  z-index: 10;
 }
 .clicker-image-container {
-  max-width: 100%;
+  width: 100%;
   height: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
+  z-index: 10;
+  margin-top: 25%;
 }
 .clicker-image-container button{
  background-color: rgba( 0, 0, 0, 0);
  border: none;
  height: 75%;
+ z-index: 10;
  transition: all 0.25s;
 }
 .clicker-image-container button:active{
-  /* height: 65%; */
+  opacity: 1;
   transform: scale(0.9);
 }
 .clicker-image-container button:focus{
@@ -101,22 +117,41 @@ button:active{
   outline: none;
 }
 .clicker-image-container button img{
+  z-index: 10;
   height: 100%;
   width: auto;
 }
+
 .upgrades-container {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   min-width: 30%;
-  /* width: min-content; */
+  position: relative;
   overflow: scroll;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 0px;
   margin: 0;
-  /* max-height: 80vh; */
 }
-
+#purchase-quantity {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: #053322;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  width: calc(100%-10px);
+  margin: 5px;
+  padding: 3px;
+  border: 1px solid white;
+  border-radius: 5px;
+}
+#purchase-quantity button {
+  flex: 1;
+  font-size: 4vmin;
+  padding: 10px 5px;
+}
 /* styling for upgrades in upgrades-container div */
 .upgrade {
   display: flex;
@@ -183,6 +218,7 @@ button:active{
   left: 5px;
   padding: 5px;
   background-color: rgb(120, 5, 11);
+  z-index: 10;
 }
 #reset-storage:active {
   transform: scale(0.9);
@@ -195,4 +231,58 @@ button:active{
 }
 .tippy-box[data-theme~='money'] p {
   margin: 0;
+}
+/* falling money styling */
+.falling-money {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  animation: fall 7s 1;
+  animation-timing-function: linear;
+  z-index: 0;
+  padding: 10px;
+}
+
+@keyframes fall {
+  0%{
+    top: 0;
+    rotate: 0;
+  }
+  100%{
+    top: 100%;
+    rotate: 720deg;
+  }
+}
+
+@keyframes freeze-fall {
+  0%{
+    top: 0;
+    rotate: 0;
+    box-shadow: 
+      inset 0 0 25px 25px rgba(255, 215, 0, 0.8),
+      0 0 25px 25px rgba(255, 215, 0, 0.8);
+    border: 1px solid rgba(255, 215, 0, 1);
+    filter: opacity(0.75) drop-shadow(0 0 30px rgb(255, 215, 0)) saturate(135%); 
+  }
+  25%{
+    z-index: 15;
+  }
+  37.5%{
+    top: 50%;
+    rotate: 360deg;
+  }
+  62.5%{
+    top: 50%;
+    rotate: 360deg;
+  }
+  100%{
+    top: 110%;
+    rotate: 720deg;
+    z-index: 15;
+    box-shadow: 
+      inset 0 0 25px 25px rgba(255, 215, 0, 0.8),
+      0 0 25px 25px rgba(255, 215, 0, 0.8);
+    border: 1px solid rgba(255, 215, 0, 1);
+    filter: opacity(0.75) drop-shadow(0 0 30px rgb(255, 215, 0)) saturate(135%); 
+  }
 }
