@@ -4,7 +4,7 @@ function FallingMoneyManager(){
     const img = document.createElement('img');
     img.classList.add('falling-money');
     img.style.left = xPos;
-    img.src = '/images/money.png';
+    img.src = 'images/money.png';
     this.clickerContainer.appendChild(img);
     img.addEventListener('animationend', e => {
       const randomX = Math.floor(Math.random()*(this.width-50));
