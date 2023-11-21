@@ -6,16 +6,19 @@
   <meta name="viewport" content="width=device-width">
   <title>Money Maker</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
-  <script src="./scripts/tippy/popper.min.js"></script>
-  <script src="./scripts/tippy/tippy.umd.js"></script>
+  <script src="/scripts/tippy/popper.min.js"></script>
+  <script src="/scripts/tippy/tippy.umd.js"></script>
+  <!-- <script src="console.js"></script> -->
 </head>
 
 <body>
+  <!-- <script>const debug = new Console('left: 30px; top: 30px;');</script> -->
   <div class="main-container">
-    <div class="game-header"><h1>Money Maker</h1></div>
+    <h1 class="game-header">Money Maker</h1>
     <div class="game-container">
-      <!-- where clickable icon and such is -->
+      <!-- where clickable icon and things of such nature may lie -->
       <div class="clicker-container">
+        <img class="falling-money" src="/images/money.png"/>
         <h1></h1>
         <p></p>
         <div class="clicker-image-container">
@@ -41,7 +44,6 @@
       </div>
     </div>
   </div>
-
   <script src="script.js" type="module"></script>
 </body>
 

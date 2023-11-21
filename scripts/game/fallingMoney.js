@@ -4,18 +4,19 @@ function FallingMoneyManager(){
     const img = document.createElement('img');
     img.classList.add('falling-money');
     img.style.left = xPos;
-    img.src = 'images/money.png';
+    img.src = '/images/money.png';
     this.clickerContainer.appendChild(img);
     img.addEventListener('animationend', e => {
       const randomX = Math.floor(Math.random()*(this.width-50));
+      console.log(this.width);
       img.style.left = (randomX)+'px';
       img.style.animationIterationCount = getComputedStyle(img).animationIterationCount+1;
   
       //10% chance of golden money and img isn't a golden money
       const chance = this.maxFallingMoneyCount/100*25;
       console.log('chance val: '+chance);
-      console.log(Math.random()*this.maxFallingMoneyCount);
-      if(Math.random()*this.maxFallingMoneyCount <= 10000 && !(img.dataset.goldenMoney == 'true')){
+      //console.log(Math.random()*this.maxFallingMoneyCount);
+      if(Math.random()*this.maxFallingMoneyCount <= chance && !(img.dataset.goldenMoney == 'true')){
         img.dataset.goldenMoney = true;
         img.style.borderRadius = '50px';
         img.style.animation = 'freeze-fall 7s 1';
@@ -24,6 +25,7 @@ function FallingMoneyManager(){
           img.style.border = 'none';
           img.dataset.goldenMoney = false;
           const randomX = Math.floor(Math.random()*(this.width-50));
+          console.log(this.width);
           img.style.animation = 'fall 7s 1';
           img.style.animationTimingFunction = 'linear';
           img.style.left = (randomX)+'px';
@@ -39,7 +41,7 @@ function FallingMoneyManager(){
         img.addEventListener('animationend', callback, {once: true});
       }
     });
-  };
+  }
   
   this.fallingMoneyCount = 0;
   this.width = document.querySelector('.clicker-container').getBoundingClientRect().width;

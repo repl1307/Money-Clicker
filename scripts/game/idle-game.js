@@ -1,7 +1,8 @@
 import { FallingMoneyManager } from './fallingMoney.js';
+import PurchaseQuantityManager from './purchaseQuantity.js';
 import handleSmallScreen from './smallScreen.js';
 
-let saveData = true;
+window.saveData = true;
 class Game {
   constructor(){
     this.upgrades = {};
@@ -14,6 +15,20 @@ class Game {
     this.handleSmallScreen = handleSmallScreen;
     window.addEventListener('resize', this.handleSmallScreen);
     this.handleSmallScreen();
+    //purchase quantity functionality
+    const purchaseQuantity = document.getElementById('purchase-quantity');
+    for(let i = 0; i < purchaseQuantity.children.length; i++){
+      purchaseQuantity.children[i].addEventListener('click', e => {
+        this.changePurchaseMode(10 ** i);
+      });
+    }
+    this.purchaseMode = 1;
+    this.changePurchaseMode = mode => {
+      if(mode == this.purchaseMode){ return; }
+      this.purchaseMode = mode;
+      this.updateUpgradeDisplay();
+      console.log('The new mode is '+mode+'!');
+    };    
     //add clicker functionality
     document.querySelector('.clicker-image-container button').onclick = () => {
       this.totalMoney+=this.clickIncome;
@@ -52,11 +67,17 @@ class Game {
     document.querySelector('.clicker-container h1').textContent = this.name+'\'s Ethical Money-Making Operation ($'+this.totalMoney.format()+')';
     document.querySelector('.clicker-container p').textContent = '$'+this.getIncomePerSecond().format()+' per second';
   }
+  //update upgrade display
+  updateUpgradeDisplay(){
+    for (const upgrade of Object.values(this.upgrades)) {
+       upgrade.purchaseButton.textContent = 'Purchase ($'+(upgrade.price*this.purchaseMode).format()+')';
+    }
+  }
   //create an upgrade provided the name, amount of money added per second, and initial price
   // a custom image can also be provided, by giving the path as a string
-  addUpgrade(name="N/A", customDescription="Gives Money", income=1, price=10, customOpts={interval: 1, imageSrc: "images/money.png"}){
+  addUpgrade(name="N/A", customDescription="Gives Money", income=1, price=10, customOpts={interval: 1, imageSrc: "/images/money.png"}){
     let interval = customOpts.interval || 1;
-    let imageSrc = customOpts.imageSrc || "images/money.png"
+    let imageSrc = customOpts.imageSrc || "/images/money.png"
     const upgradeDiv = document.createElement('div');
     upgradeDiv.classList.add('upgrade');
   
@@ -87,16 +108,16 @@ class Game {
     const game = this;
     purchaseButton.onclick = (e) => {
       const upgrade = game.upgrades[purchaseButton.dataset.name];
-      if(this.totalMoney < upgrade.price){
+      if(this.totalMoney < upgrade.price * this.purchaseMode){
         alert("You are too broke to purchase this");
         return;
       }
-      this.totalMoney -= upgrade.price;
-      this.updateMoneyDisplay();
-      upgrade.price *= 1.06;
-      upgrade.quantityOwned++;
+      this.totalMoney -= upgrade.price * this.purchaseMode;
+      upgrade.price *= 1.017 * this.purchaseMode;
+      upgrade.quantityOwned += this.purchaseMode;
       purchaseButton.textContent = 'Purchase ($'+upgrade.price.format()+')';
       upgrade.owned.textContent = 'Owned: '+upgrade.quantityOwned;
+      this.updateUpgradeDisplay();
       for(const upgrade of Object.values(this.upgrades))
         upgrade.popup.setContent(this.updatePopUpContent(upgrade));
     };
@@ -198,8 +219,6 @@ class Game {
     if(localStorageAvailable && localStorage.getItem('upgrades')){
       const upgrades = JSON.parse(localStorage.getItem('upgrades'));
       for(const [key, value] of Object.entries(upgrades)){
-        // debug.log(key);
-        // debug.log(value);
         const upgrade = this.upgrades[key];
         upgrade.quantityOwned = value.quantityOwned;
         upgrade.imageSrc = value.imageSrc;
@@ -210,7 +229,6 @@ class Game {
         upgrade.purchaseButton.textContent = 'Purchase ($'+upgrade.price.format()+')';
         upgrade.popup.setContent(this.updatePopUpContent(upgrade));
       }
-      // debug.log(this.upgrades)
     }
     //update local storage on page close
     window.onbeforeunload = (e) => {
@@ -222,7 +240,6 @@ class Game {
           delete upgrade.popup;
         }
         localStorage.setItem('upgrades', JSON.stringify(this.upgrades));
-        
       }
     }
     this.updateMoneyDisplay();

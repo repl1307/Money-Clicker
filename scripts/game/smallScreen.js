@@ -22,9 +22,11 @@ export default function handleSmallScreen(){
     console.log(headerHeight);
     document.querySelector('.clicker-image-container button').style.height = '90vmin';
     document.querySelector('.clicker-image-container button').style.width = '100%';
-    document.getElementById('reset-storage').style.bottom = '10px';
+    document.getElementById('reset-storage').style.bottom = '10px';;
     document.querySelector('.clicker-container h1').style.fontSize = '6vmin';
     document.querySelector('.clicker-container p').style.fontSize = '5vmin';
+    //document.querySelector('.clicker-image-container').style.marginBottom = '20%';
+
   }
   else{
     document.querySelector('.clicker-image-container button').style.height = '70vmin';
@@ -37,7 +39,11 @@ export default function handleSmallScreen(){
     mainContainer.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     clickerContainer.style.minWidth = '70%';
+    //clickerContainer.style.minHeight = '0';
+    //clickerContainer.style.width = 'auto';
     document.querySelector('.game-header').style.height = '';
+    // document.querySelector('.clicker-image-container').style.marginTop = 0;
+    //document.getElementById('reset-storage').style.bottom = '15px';
     document.querySelector('.game-header').style.fontSize = '6vmin';
     document.querySelector('.clicker-container h1').style.fontSize = '4vmin';
     document.querySelector('.clicker-container p').style.fontSize = '3.5vmin';
